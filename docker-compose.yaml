@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  focus-mariadb:
+    image: focus-mariadb:v1
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pf0cusF14pdb4dm"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    environment:
+      - MYSQL_PWD=${MARIADB_ROOT_PASSWORD}
+
+  focus-reclamacao:
+    image: focus-reclamacao:v1
+    ports:
+      - "80:8080"
+    environment:
+      - DB_FOCUS_URL=${DB_FOCUS_DEFAULT_URL}
+    depends_on:
+      focus-mariadb:
+        condition: service_healthy
+
+    restart: no
+
+  focus-produto:
+    image: focus-produto:v1
+    ports:
+      - "81:8080"
+    environment:
+      - DB_FOCUS_URL=${DB_FOCUS_DEFAULT_URL}
+    depends_on:
+      focus-mariadb:
+        condition: service_healthy
+
+  focus-pedido:
+    image: focus-pedido:v1
+    ports:
+      - "82:8080"
+    environment:
+      - DB_FOCUS_URL=${DB_FOCUS_DEFAULT_URL}
+    depends_on:
+      focus-mariadb:
+        condition: service_healthy
+
+  focus-pagamento:
+    image: focus-pagamento:v1
+    ports:
+      - "83:8080"
+    environment:
+      - DB_FOCUS_URL=${DB_FOCUS_DEFAULT_URL}
+    depends_on:
+      focus-mariadb:
+        condition: service_healthy
+
+  focus-cliente:
+    image: focus-cliente:v1
+    ports:
+      - "84:8080"
+    environment:
+      - DB_FOCUS_URL=${DB_FOCUS_DEFAULT_URL}
+    depends_on:
+      focus-mariadb:
+        condition: service_healthy
+
+  focus-atendimento:
+    image: focus-atendimento:v1
+    ports:
+      - "85:8080"
+    environment:
+      - DB_FOCUS_URL=${DB_FOCUS_DEFAULT_URL}
+    depends_on:
+      focus-mariadb:
+        condition: service_healthy
