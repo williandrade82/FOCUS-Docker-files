@@ -2,11 +2,11 @@ version: '3.8'
 
 services:
   focus-mariadb:
-    image: focus-mariadb:v1
+    image: focus-mariadb:${VERSION}
     ports:
       - "3306:3306"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pf0cusF14pdb4dm"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
       timeout: 3s
       retries: 30
@@ -14,7 +14,7 @@ services:
       - MYSQL_PWD=${MARIADB_ROOT_PASSWORD}
 
   focus-reclamacao:
-    image: focus-reclamacao:v1
+    image: focus-reclamacao:${VERSION}
     ports:
       - "80:8080"
     environment:
@@ -26,7 +26,7 @@ services:
     restart: no
 
   focus-produto:
-    image: focus-produto:v1
+    image: focus-produto:${VERSION}
     ports:
       - "81:8080"
     environment:
@@ -36,7 +36,7 @@ services:
         condition: service_healthy
 
   focus-pedido:
-    image: focus-pedido:v1
+    image: focus-pedido:${VERSION}
     ports:
       - "82:8080"
     environment:
@@ -46,7 +46,7 @@ services:
         condition: service_healthy
 
   focus-pagamento:
-    image: focus-pagamento:v1
+    image: focus-pagamento:${VERSION}
     ports:
       - "83:8080"
     environment:
@@ -56,7 +56,7 @@ services:
         condition: service_healthy
 
   focus-cliente:
-    image: focus-cliente:v1
+    image: focus-cliente:${VERSION}
     ports:
       - "84:8080"
     environment:
@@ -66,7 +66,7 @@ services:
         condition: service_healthy
 
   focus-atendimento:
-    image: focus-atendimento:v1
+    image: focus-atendimento:${VERSION}
     ports:
       - "85:8080"
     environment:
