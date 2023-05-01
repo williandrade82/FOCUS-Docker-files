@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:20-alpine
 LABEL Grupo B - 5SCJO - 2022 - CLIENTE
 COPY jars/hackaton-reclamacoes-*.jar /app/app.jar
 ENTRYPOINT "java" "-jar" "/app/app.jar"
