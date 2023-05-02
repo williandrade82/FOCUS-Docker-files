@@ -1,3 +1,4 @@
+
     create table atendimento (
        id integer auto_increment,
         data timestamp,
@@ -141,3 +142,73 @@ VALUES
 ('2023-04-17', 'Atendimento via telefone', 'Concluído', 4),
 ('2023-04-17', 'Atendimento via telefone', 'Concluído', 1),
 ('2023-04-16', 'Atendimento via chat', 'Em andamento', 1);
+
+-- =============================== --
+-- SEGURANÇA - AUTENTICAÇÃO
+-- =============================== --
+
+CREATE TABLE `focusdb`.`usuario` (
+  `id` integer auto_increment NOT NULL,
+  `username` VARCHAR(100) NOT NULL,
+  `password` VARCHAR(100) NOT NULL,
+  `dt_desativado` date,
+  PRIMARY KEY (`id`))
+COMMENT = 'Usuarios de acesso ao sistema';
+
+CREATE TABLE `focusdb`.`perfil_acesso` (
+  `id` 	integer auto_increment NOT NULL,
+  `codigo`	VARCHAR(100) NOT NULL,
+  `nome`	VARCHAR(100) NOT NULL,
+  `descricao` VARCHAR(200) NOT NULL,
+  `dt_desativado` date,
+  PRIMARY KEY (`id`))
+COMMENT = 'Perfis de acesso ao sistema.';
+
+CREATE TABLE `focusdb`.`perfil_acesso_usuario` (
+  `id` integer auto_increment NOT NULL,
+  `id_perfil_acesso` integer NOT NULL,
+  `id_usuario` integer NOT NULL,
+  `dt_desativado` date,
+  PRIMARY KEY (`id`))
+COMMENT = 'Relacao de perfis de acesso ao sistema com os usuarios.';
+
+-- Relacionamentos
+ALTER TABLE `focusdb`.`perfil_acesso_usuario` 
+ADD INDEX `perfil_acesso_usuario_usuario_idx` (`id_usuario` ASC) VISIBLE;
+;
+ALTER TABLE `focusdb`.`perfil_acesso_usuario` 
+ADD CONSTRAINT `perfil_acesso_usuario_usuario`
+  FOREIGN KEY (`id_usuario`)
+  REFERENCES `focusdb`.`usuario` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `focusdb`.`perfil_acesso_usuario` 
+ADD INDEX `perfil_acesso_usuario_perfil_acesso_idx` (`id_perfil_acesso` ASC) VISIBLE;
+;
+ALTER TABLE `focusdb`.`perfil_acesso_usuario` 
+ADD CONSTRAINT `perfil_acesso_usuario_perfil_acesso`
+  FOREIGN KEY (`id_perfil_acesso`)
+  REFERENCES `focusdb`.`perfil_acesso_usuario` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+-- Populando tabela de usuários
+INSERT INTO `focusdb`.`usuario` (`id`,`username`,`password`) VALUES (1,'admin','$2a$10$5jxhtECLAvjSt.nHkSh0JOgY7jNEUJFmd5walW8agyZ586X6/0P1q');
+INSERT INTO `focusdb`.`usuario` (`id`,`username`,`password`) VALUES (2,'supervisor-atendimento','$2a$10$WtV.6hz9kMvG/9i9dMwVaO8wKC.ZiQZIfRFiA605qI4CnzM0YuhpC');
+INSERT INTO `focusdb`.`usuario` (`id`,`username`,`password`) VALUES (3,'atendente','$2a$10$iTqV68rZu5mQUeq2Jhq/ruj4bDZlU5b3ryorxqQx/DVYKdes.W3Qa');
+INSERT INTO `focusdb`.`usuario` (`id`,`username`,`password`) VALUES (4,'cliente','$2a$10$ehbYL0UV4xOyslw91Gq06.0UjfKaLRr22tYOFBMto7tpJ8rZjI3f.');
+
+-- Populando tabela de perfis de acesso
+INSERT INTO `focusdb`.`perfil_acesso` (`id`,`codigo`, `nome`, `descricao`) VALUES (1,'ADMIN', 'Administrador', 'Administração do sistema.');
+INSERT INTO `focusdb`.`perfil_acesso` (`id`,`codigo`, `nome`, `descricao`) VALUES (2,'SUP-ATENDIMENTO', 'Supervisor de atendimento', 'Supervisores que controlam usuários e permissões especiais nos atendimentos.');
+INSERT INTO `focusdb`.`perfil_acesso` (`id`,`codigo`, `nome`, `descricao`) VALUES (3,'ATENDENTE', 'Atendente', 'Atendente do sistema, com permissões de iterações com as reclamações e outros objetos. Possui limitações de acesso.');
+INSERT INTO `focusdb`.`perfil_acesso` (`id`,`codigo`, `nome`, `descricao`) VALUES (4,'CLIENTE', 'Cliente', 'Acessos para os clientes. Possui limitações nas iterações de leitura/gravação.');
+
+-- Populando relacionamentos entre usuários e perfis de acesso
+INSERT INTO `focusdb`.`perfil_acesso_usuario` (id, id_perfil_acesso, id_usuario) 
+VALUES
+(1, 1, 1),
+(2, 2, 2),
+(3, 3, 3),
+(4, 4, 4);
