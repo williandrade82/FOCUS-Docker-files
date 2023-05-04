@@ -29,6 +29,7 @@ call :build pedido
 call :build produto
 call :build reclamacao
 call :build mariadb
+call :build security
 
 cd %ROOT_ADDR%
 

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   focus-mariadb:
-    image: focus-mariadb:${VERSION}
+    image: ${REPOSITORY}focus-mariadb:${VERSION}
     ports:
       - "3306:3306"
     healthcheck:
@@ -12,7 +12,7 @@ services:
       retries: 30
 
   focus-reclamacao:
-    image: focus-reclamacao:${VERSION}
+    image: ${REPOSITORY}focus-reclamacao:${VERSION}
     ports:
       - "80:8080"
     environment:
@@ -21,10 +21,8 @@ services:
       focus-mariadb:
         condition: service_healthy
 
-    restart: no
-
   focus-produto:
-    image: focus-produto:${VERSION}
+    image: ${REPOSITORY}focus-produto:${VERSION}
     ports:
       - "81:8080"
     environment:
@@ -34,7 +32,7 @@ services:
         condition: service_healthy
 
   focus-pedido:
-    image: focus-pedido:${VERSION}
+    image: ${REPOSITORY}focus-pedido:${VERSION}
     ports:
       - "82:8080"
     environment:
@@ -44,7 +42,7 @@ services:
         condition: service_healthy
 
   focus-pagamento:
-    image: focus-pagamento:${VERSION}
+    image: ${REPOSITORY}focus-pagamento:${VERSION}
     ports:
       - "83:8080"
     environment:
@@ -54,7 +52,7 @@ services:
         condition: service_healthy
 
   focus-cliente:
-    image: focus-cliente:${VERSION}
+    image: ${REPOSITORY}focus-cliente:${VERSION}
     ports:
       - "84:8080"
     environment:
@@ -64,7 +62,7 @@ services:
         condition: service_healthy
 
   focus-atendimento:
-    image: focus-atendimento:${VERSION}
+    image: ${REPOSITORY}focus-atendimento:${VERSION}
     ports:
       - "85:8080"
     environment:
@@ -72,3 +70,14 @@ services:
     depends_on:
       focus-mariadb:
         condition: service_healthy
+
+  focus-security:
+    image: ${REPOSITORY}focus-security:${VERSION}
+    ports:
+      - "86:8080"
+    environment:
+      - DB_FOCUS_URL=${DB_FOCUS_DEFAULT_URL}
+    depends_on:
+      focus-mariadb:
+        condition: service_healthy
+

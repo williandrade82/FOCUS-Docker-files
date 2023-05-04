@@ -38,7 +38,10 @@ call :PUSH pagamento
 call :PUSH pedido
 call :PUSH produto
 call :PUSH reclamacao
+call :PUSH security
 
+echo %REPOSITORIO% > .repositorio-env
+echo %TARGET_TAG% > .repositorio-tag-env
 echo.
 echo ----------------------
 echo Finalizando publicacao...
@@ -50,7 +53,7 @@ goto :EOF
 
 :NO_REP_DEF
 echo ERRO: Sem repositorio definido.
-echo       Use o primeiro parâmetro para informar o repositório público
+echo       Use o primeiro parametro para informar o repositorio publico
 echo.
 goto :INSTRUCTIONS
 

@@ -193,6 +193,13 @@ ADD CONSTRAINT `perfil_acesso_usuario_perfil_acesso`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
+-- Regra de usuário com único login não desativado:
+ALTER TABLE `focusdb`.`usuario` 
+ADD UNIQUE INDEX `uk_nome_dt_desativ` (`username` ASC, `dt_desativado` ASC) VISIBLE;
+;
+
+
+
 -- Populando tabela de usuários
 INSERT INTO `focusdb`.`usuario` (`id`,`username`,`password`) VALUES (1,'admin','$2a$10$5jxhtECLAvjSt.nHkSh0JOgY7jNEUJFmd5walW8agyZ586X6/0P1q');
 INSERT INTO `focusdb`.`usuario` (`id`,`username`,`password`) VALUES (2,'supervisor-atendimento','$2a$10$WtV.6hz9kMvG/9i9dMwVaO8wKC.ZiQZIfRFiA605qI4CnzM0YuhpC');
